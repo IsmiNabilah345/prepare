@@ -117,20 +117,28 @@
     </div>
   </section> --}}
 
-  <!-- Newsletter -->
-  {{-- <section class="py-5 text-white text-center" style="background-color:var(--clr-mid-blue);">
-    <div class="container" data-aos="zoom-in">
-      <h5 class="mb-3">Dapatkan Promo & Info Terbaru</h5>
+  <section class="py-5" style="background-color:var(--clr-lilac);">
+    <div class="container">
+      <h2 class="text-center mb-4" data-aos="fade-up" style="color:var(--clr-dark-navy)">
+        Lacak Paket
+      </h2>
       <form class="row justify-content-center g-2">
         <div class="col-sm-6">
-          <input type="email" class="form-control" placeholder="Masukkan email kamu" required>
+          <input type="name" class="form-control" placeholder="Masukkan nomor resi mu" required>
         </div>
         <div class="col-sm-auto">
-          <button class="btn btn-light">Subscribe</button>
+          <button class="btn btn-light">Cari</button>
         </div>
       </form>
     </div>
-  </section> --}}
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-5 text-white text-center" style="background-color:var(--clr-mid-blue);">
+    <div class="container" data-aos="zoom-in">
+      <h2 class="mb-3">Cek Tarif</h2>
+    </div>
+  </section>
 
   <!-- Trust Badges -->
   {{-- <section class="py-4">

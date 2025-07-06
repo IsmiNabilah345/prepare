@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Kurir extends Model
+class Pengirim extends Model
 {
     use SoftDeletes;
 
-    protected $primaryKey = 'id_kurir';
+    protected $primaryKey = 'id_pengirim';
 
     protected $fillable = [
-        'nama_kurir',
-        'no_telp',
+        'nama_pengirim',
+        'alamat_pengirim',
+        'kode_pos',
+        'telp_pengirim',
     ];
 }

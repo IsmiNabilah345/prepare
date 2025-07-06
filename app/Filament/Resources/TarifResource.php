@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\KurirResource\Pages;
-use App\Filament\Resources\KurirResource\RelationManagers;
-use App\Models\Kurir;
+use App\Filament\Resources\TarifResource\Pages;
+use App\Filament\Resources\TarifResource\RelationManagers;
+use App\Models\Tarif;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,24 +15,26 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 
-class KurirResource extends Resource
+class TarifResource extends Resource
 {
-    protected static ?string $model = Kurir::class;
+    protected static ?string $model = Tarif::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
-    protected static ?string $navigationLabel = 'Kurir';
+    protected static ?string $navigationLabel = 'Tarif';
+
+    protected static ?string $navigationGroup = 'Pengelolaan';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('nama_kurir')
+                TextInput::make('jenis')
                     ->required()
-                    ->label('Nama Kurir'),
-                TextInput::make('no_telp')
+                    ->label('Jenis'),
+                TextInput::make('harga')
                     ->required()
-                    ->label('Nomor Telepon'),
+                    ->label('Harga /kg')
             ]);
     }
 
@@ -40,10 +42,10 @@ class KurirResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_kurir')
-                    ->label('Nama Kurir'),
-                TextColumn::make('no_telp')
-                    ->label('Nomor Telepon')
+                TextColumn::make('jenis')
+                    ->label('Jenis'),
+                TextColumn::make('harga')
+                    ->label('Harga /kg'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -51,13 +53,13 @@ class KurirResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\ForceDeleteBulkAction::make(),
-                Tables\Actions\RestoreBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -71,9 +73,9 @@ class KurirResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListKurirs::route('/'),
-            'create' => Pages\CreateKurir::route('/create'),
-            'edit' => Pages\EditKurir::route('/{record}/edit'),
+            'index' => Pages\ListTarifs::route('/'),
+            'create' => Pages\CreateTarif::route('/create'),
+            'edit' => Pages\EditTarif::route('/{record}/edit'),
         ];
     }
 

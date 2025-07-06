@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('produks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('id_kurir')->nullable()->constrained('users')->onDelete('set null');
             $table->integer('jumlah_produk');
             $table->integer('berat_kiriman');
-            $table->integer('berat_asli'); 
+            $table->integer('berat_asli');
             $table->integer('volume_produk');
             $table->string('ket_produk');
-            $table->string('no_resi');
+            $table->string('no_resi')->unique();
             $table->timestamps();
         });
     }
