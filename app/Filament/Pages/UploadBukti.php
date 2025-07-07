@@ -64,7 +64,7 @@ class UploadBukti extends Page implements HasForms
 
 
         session()->flash('success', 'Bukti pengiriman berhasil diupload!');
-        return redirect()->route('filament.admin.pages.dashboard-kurir');
+        return redirect()->route('filament.kurir.pages.dashboard-kurir');
     }
 
     public function form(Form $form): Form
@@ -76,11 +76,13 @@ class UploadBukti extends Page implements HasForms
 
     public static function shouldRegisterNavigation(): bool
     {
-        return Auth::check() && Auth::user()->role === 'kurir';
+        return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
     }
+
 
     public static function canAccess(): bool
     {
-        return Auth::check() && Auth::user()->role === 'kurir';
+        return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
+        //return Auth::check() && Auth::user()->role === 'kurir';
     }
 }

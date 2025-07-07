@@ -16,7 +16,7 @@ class DashboardKurir extends Page
 
     public function mount(): void
     {
-        if (Auth::user()?->role !== 'kurir') {
+        if (! in_array(Auth::user()?->role, ['kurir', 'kurir_motor', 'kurir_truk'])) {
             abort(403, 'Akses hanya untuk kurir.');
         }
 

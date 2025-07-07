@@ -11,8 +11,12 @@ class LoginResponse implements LoginResponseContract
     {
         $user = Auth::user();
 
+        if (!$user) {
+            return redirect('/login'); // fallback, just in case
+        }
+
         $redirectTo = match ($user->role) {
-            'kurir', 'kurir_motor', 'kurir_truk' => route('filament.pages.dashboard-kurir'),
+            'kurir', 'kurir_motor', 'kurir_truk' => route('filament.kurir.pages.dashboard-kurir'),
             default => route('filament.admin.pages.dashboard'),
         };
 
