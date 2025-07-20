@@ -28,29 +28,21 @@ class TrackingResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                TextInput::make('no_resi')
-                    ->required()
-                    ->label('Nomor Resi'),
-                TextInput::make('status')
-                    ->required()
-                    ->label('Status'),
-                TextInput::make('nama_kurir')
-                    ->required()
-                    ->label('Nama Kurir')
-            ]);
+            ->schema([]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('no_resi')
-                    ->label('Nomor Resi'),
+                TextColumn::make('id_pengiriman')
+                    ->label('Pengiriman Produk'),
                 TextColumn::make('status')
                     ->label('Status'),
-                TextColumn::make('nama_kurir')
-                    ->label('Nama Kurir')
+                TextColumn::make('foto_bukti')
+                    ->label('Bukti Foto'),
+                TextColumn::make('catatan')
+                    ->label('Keterangan')
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

@@ -14,8 +14,12 @@ class Tracking extends Model
     protected $fillable = [
         'id_pengiriman',
         'status',
-        //'nama_kurir',
         'foto_bukti',
-        'catatan',
+        'catatan'
     ];
+
+    public function pengiriman()
+    {
+        return $this->belongsTo(Pengiriman::class, 'id_pengiriman');
+    }
 }
