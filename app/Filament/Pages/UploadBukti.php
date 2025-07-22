@@ -1,88 +1,109 @@
 <?php
 
-namespace App\Filament\Pages;
+namespace App\Filament\Kurir\Pages;
 
 use Filament\Pages\Page;
-use Filament\Forms;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Concerns\InteractsWithForms;
-
+use App\Models\Pengiriman;
 use App\Models\Tracking;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use Filament\Forms\Form;
+use Livewire\WithFileUploads;
 
-
-class UploadBukti extends Page implements HasForms
+class UploadBukti extends Page
 {
-    use InteractsWithForms;
+    use WithFileUploads;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-up-tray';
-    protected static ?string $title = 'Upload Bukti';
-    protected static string $view = 'filament.pages.upload-bukti';
+    protected static string $view = 'filament.kurir.pages.upload-bukti';
+    protected static ?string $navigationLabel = null;
 
-    public ?int $id_pengiriman = null;
+    public $foto_bukti;
+    public ?Pengiriman $pengiriman = null;
 
-    public array $data = [];
-
-    public function mount(Request $request): void
+    public function mount($id)
     {
-        $this->id_pengiriman = $request->id;
-    }
-
-    protected function getFormSchema(): array
-    {
-        return [
-            FileUpload::make('foto')
-                ->label('Foto Bukti Pengiriman')
-                ->image()
-                ->required()
-                ->disk('public')
-                ->directory('images'),
-            TextInput::make('catatan')
-                ->label('Catatan Tambahan')
-                ->maxLength(255),
-        ];
+        $this->pengiriman = Pengiriman::findOrFail($id);
     }
 
     public function submit()
     {
-        $data = $this->form->getState();
-
-        $path = $data['foto'];
+        $path = $this->foto_bukti->store('images', 'public');
 
         Tracking::create([
-            'id_pengiriman' => $this->id_pengiriman,
-            'status' => 'Terkirim',
-            //'nama_kurir' => Auth::user()->name,
+            'id_pengiriman' => $this->pengiriman->id,
             'foto_bukti' => $path,
-            'catatan' => $data['catatan'] ?? null,
+            'waktu_kirim' => now(),
         ]);
 
+        $this->pengiriman->update([
+            'status' => 'terkirim',
+        ]);
 
-
-        session()->flash('success', 'Bukti pengiriman berhasil diupload!');
         return redirect()->route('filament.kurir.pages.dashboard-kurir');
+        //return redirect()->route('filament.kurir.pages.upload-bukti', ['id' => $this->pengiriman->id]);
     }
 
-    public function form(Form $form): Form
+    public static function getSlug(): string
     {
-        return $form
-            ->schema($this->getFormSchema())
-            ->statePath('data');
+        return 'upload-bukti';
     }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
-    }
-
 
     public static function canAccess(): bool
     {
         return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
-        //return Auth::check() && Auth::user()->role === 'kurir';
     }
 }
+
+
+
+// 
+// use Livewire\WithFileUploads;
+// use Illuminate\Support\Facades\Auth;
+// use App\Models\Tracking;
+
+// class UploadBukti extends Page
+// {
+//     use WithFileUploads;
+
+//     public $foto_bukti;
+
+//     protected static string $view = 'filament.pages.upload-bukti';
+
+//     public ?Pengiriman $pengiriman = null;
+
+//     public function mount($id = null): void
+//     {
+//         $this->pengiriman = Pengiriman::with(['transaksi.produk', 'transaksi.penerimas'])
+//             ->findOrFail($id);
+
+//         if (! in_array(Auth::user()?->role, ['kurir', 'kurir_motor', 'kurir_truk'])) {
+//             abort(403);
+//         }
+//     }
+
+
+//     public function simpan()
+//     {
+//         $filename = time() . '-' . $this->foto_bukti->getClientOriginalName();
+//         $this->foto_bukti->storeAs('images', $filename, 'public');
+
+//         $path = 'images/' . $filename;
+
+//         Tracking::create([
+//             'id_pengiriman' => $this->pengiriman->id,
+//             'foto_bukti' => $path,
+//         ]);
+
+//         $this->pengiriman->update(['status' => 'terkirim']);
+
+//         session()->flash('success', 'Bukti berhasil diupload.');
+//         return redirect()->route('filament.kurir.pages.dashboard-kurir');
+//     }
+
+//     public static function canAccess(): bool
+//     {
+//         return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
+//     }
+
+//     public static function getSlug(): string
+//     {
+//         return 'upload-bukti';
+//     }

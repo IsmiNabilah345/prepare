@@ -14,6 +14,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
+use App\Models\Transaksi;
+use App\Models\User;
 
 class PengirimanResource extends Resource
 {
@@ -27,29 +31,46 @@ class PengirimanResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('id_produk')
-                    ->relationship('produk', 'no_resi')
+                Select::make('id_transaksi')
+                    ->label('Transaksi (No Resi)')
+                    ->options(function () {
+                        return Transaksi::with('produk')
+                            ->get()
+                            ->mapWithKeys(fn($trx) => [$trx->id => $trx->no_resi])
+                            ->toArray();
+                    })
                     ->searchable()
-                    ->required()
-                    ->label('Produk (No Resi)'),
+                    ->required(),
 
-                Forms\Components\Select::make('id_kurir')
-                    ->relationship('kurir', 'name')
+                Select::make('id_kurir')
+                    ->label('Nama Kurir')
+                    ->options(function () {
+                        return User::whereIn('role', ['kurir', 'kurir_motor', 'kurir_truk'])
+                            ->pluck('name', 'id')
+                            ->toArray();
+                    })
                     ->searchable()
-                    ->required()
-                    ->label('Nama Kurir'),
+                    ->preload()
+                    ->required(),
 
-                Forms\Components\Select::make('id_penerima')
-                    ->relationship('penerima', 'nama_penerima')
-                    ->searchable()
-                    ->required()
-                    ->label('Penerima'),
-
-                Forms\Components\DatePicker::make('tanggal_kirim')
+                DatePicker::make('tanggal_kirim')
                     ->label('Tanggal Kirim')
                     ->required(),
 
-                Forms\Components\Select::make('status')
+                Select::make('tipe_kendaraan')
+                    ->label('Tipe Kendaraan')
+                    ->options([
+                        'motor' => 'Motor',
+                        'truk' => 'Truk',
+                    ])
+                    ->required(),
+
+                DatePicker::make('estimasi_sampai')
+                    ->label('Estimasi Sampai')
+                    ->required(),
+
+                Select::make('status')
+                    ->label('Status')
                     ->options([
                         'belum dikirim' => 'Belum Dikirim',
                         'sedang dikirim' => 'Sedang Dikirim',
@@ -58,22 +79,10 @@ class PengirimanResource extends Resource
                     ->default('belum dikirim')
                     ->required(),
 
-                Forms\Components\Select::make('tipe_kendaraan')
-                    ->label('Tipe Kendaraan')
-                    ->options([
-                        'motor' => 'Motor',
-                        'truk' => 'Truk',
-                    ])
-                    ->required(),
-
-                Forms\Components\DatePicker::make('estimasi_sampai')
-                    ->label('Estimasi Sampai'),
-
                 Textarea::make('catatan')
                     ->label('Catatan')
-                    ->nullable()
-                    ->maxLength(255),
-
+                    ->maxLength(255)
+                    ->nullable(),
             ]);
     }
 
@@ -82,15 +91,20 @@ class PengirimanResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id_produk')
-                    ->label('Produk')
-                    ->searchable(),
-                TextColumn::make('id_kurir')
-                    ->label('Nama Kurir'),
-                TextColumn::make('id_penerima')
-                    ->label('Nama Penerima'),
+                TextColumn::make('transaksi.produk.no_resi')
+                    ->label('No Resi'),
+
+                TextColumn::make('kurir.name')
+                    ->label('Kurir'),
+
                 TextColumn::make('tanggal_kirim')
-                    ->label('Tanggal Pengiriman'),
+                    ->label('Tanggal Kirim')
+                    ->date(),
+
+                TextColumn::make('estimasi_sampai')
+                    ->label('Estimasi Sampai')
+                    ->date(),
+
                 TextColumn::make('status')
                     ->label('Status'),
             ])

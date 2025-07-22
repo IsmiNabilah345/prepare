@@ -47,11 +47,6 @@ class ProdukResource extends Resource
                 TextInput::make('ket_produk')
                     ->required()
                     ->label('Keterangan produk'),
-                TextInput::make('no_resi')
-                    ->label('Nomor Resi')
-                    ->readOnly()
-                    ->default(fn() => 'Akan terisi otomatis saat simpan')
-                    ->disabled()
             ]);
     }
 

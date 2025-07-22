@@ -4,29 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Pengiriman extends Model
+class Transaksi extends Model
 {
-    use SoftDeletes;
-
     use HasFactory;
 
-    protected $table = 'pengiriman';
-
     protected $fillable = [
-        'id_transaksi',
-        'id_kurir',
-        'tanggal_kirim',
-        'status',
-        'tipe_kendaraan',
-        'estimasi_sampai',
-        'catatan',
+        'id_pengirim',
+        'id_penerima',
+        'id_produk',
+        'id_tarif',
+        'berat',
+        'harga',
+        'tgl_transaksi',
+        'total_harga',
     ];
+
 
     public function produk()
     {
         return $this->belongsTo(Produk::class, 'id_produk');
+    }
+
+    public function getNoResiAttribute()
+    {
+        return $this->produk?->no_resi;
     }
 
     public function kurir()
@@ -39,8 +41,13 @@ class Pengiriman extends Model
         return $this->belongsTo(Penerima::class, 'id_penerima');
     }
 
-    public function transaksi()
+    public function pengirim()
     {
-        return $this->belongsTo(\App\Models\Transaksi::class, 'id_transaksi');
+        return $this->belongsTo(Pengirim::class, 'id_pengirim');
+    }
+
+    public function tarif()
+    {
+        return $this->belongsTo(Tarif::class, 'id_tarif');
     }
 }

@@ -3,18 +3,18 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\DashboardKurir;
-use App\Filament\Pages\UploadBukti;
+use App\Http\Responses\CustomLoginResponse;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Pages\Auth\Login;
 use Filament\Panel;
 use Filament\PanelProvider;
-
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Session\Middleware\StartSession;
-use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class KurirPanelProvider extends PanelProvider
 {
@@ -23,11 +23,10 @@ class KurirPanelProvider extends PanelProvider
         return $panel
             ->id('kurir')
             ->path('kurir')
-            ->login()
+            ->login(\App\Filament\Kurir\Pages\Auth\Login::class)
             ->authGuard('kurir')
             ->pages([
                 DashboardKurir::class,
-                UploadBukti::class,
             ])
             ->middleware([
                 EncryptCookies::class,

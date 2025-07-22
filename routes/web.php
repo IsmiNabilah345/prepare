@@ -15,3 +15,6 @@ use App\Http\Controllers\OrderController;
  Route::view('/contact-us', 'pages.contact-us')->name('contact-us');
  Route::get('/order', [OrderController::class, 'showForm'])->name('order.form');
  Route::post('/order', [OrderController::class, 'submit'])->name('order.submit');
+//use App\Filament\Kurir\Pages\UploadBukti;
+
+Route::view('/', 'pages.home')->name('home');
