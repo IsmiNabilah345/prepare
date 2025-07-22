@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+  @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert" style="z-index:2000; position:fixed; top:80px; right:24px; min-width:300px;">
+      {{ session('success') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  @endif
   <!-- Hero -->
   <section class="hero">
     <div class="container" data-aos="zoom-in">
@@ -9,10 +15,10 @@
         Ekspedisi Cepat & Terpercaya via 
         <strong>Darat</strong>, <strong>Laut</strong>, & <strong>Udara</strong>.
       </p>
-      <a href="#" class="btn btn-primary btn-lg mx-1">
+      <a href="{{ route('trace-track') }}" class="btn btn-primary btn-lg mx-1">
         <i class="fas fa-box-open"></i> Lacak Paket
       </a>
-      <a href="#" class="btn btn-outline-light btn-lg mx-1">
+      <a href="{{ route('shipping-rates') }}" class="btn btn-outline-light btn-lg mx-1">
         <i class="fas fa-calculator"></i> Cek Tarif
       </a>
     </div>
@@ -117,7 +123,7 @@
     </div>
   </section> --}}
 
-  <section class="py-5" style="background-color:var(--clr-lilac);">
+  {{-- <section class="py-5" style="background-color:var(--clr-lilac);">
     <div class="container">
       <h2 class="text-center mb-4" data-aos="fade-up" style="color:var(--clr-dark-navy)">
         Lacak Paket
@@ -131,14 +137,14 @@
         </div>
       </form>
     </div>
-  </section>
+  </section> --}}
 
   <!-- Newsletter -->
-  <section class="py-5 text-white text-center" style="background-color:var(--clr-mid-blue);">
+  {{-- <section class="py-5 text-white text-center" style="background-color:var(--clr-mid-blue);">
     <div class="container" data-aos="zoom-in">
       <h2 class="mb-3">Cek Tarif</h2>
     </div>
-  </section>
+  </section> --}}
 
   <!-- Trust Badges -->
   {{-- <section class="py-4">

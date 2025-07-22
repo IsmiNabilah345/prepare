@@ -18,6 +18,10 @@ class Tracking extends Model
         'catatan'
     ];
 
+    public function kurir()
+    {
+        return $this->belongsTo(\App\Models\Kurir::class, 'id_kurir');
+      
     public function pengiriman()
     {
         return $this->belongsTo(Pengiriman::class, 'id_pengiriman');

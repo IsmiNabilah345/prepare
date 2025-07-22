@@ -30,6 +30,9 @@
     /* Navbar */
     .navbar {
       background-color: var(--clr-dark-navy) !important;
+      z-index: 1100 !important;
+      position: sticky;
+      top: 0;
     }
     .navbar .nav-link,
     .navbar .navbar-brand {
@@ -42,12 +45,27 @@
 
     /* CTA Bar */
     #cta-bar {
-      display: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      min-height: 64px;
+      padding: 12px 1rem;
       background-color: var(--clr-orange);
       color: var(--clr-white);
-      position: sticky;
-      top: 56px; /* di bawah navbar */
-      z-index: 1020;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      width: 100%;
+      z-index: 1040;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: top 0.3s;
+    }
+    #cta-bar .btn {
+      margin-left: 0.5rem;
+    }
+    body.cta-active main {
+      margin-top: 48px;
     }
     #cta-bar .btn {
       transform: scale(1);
@@ -105,6 +123,7 @@
     }
     .dropdown-menu {
       opacity: 0;
+      z-index: 1200 !important;
     }
 
     /* Footer */
@@ -121,7 +140,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="">
+      <a class="navbar-brand" href="{{ route('home') }}">
         <i class="fas fa-box-open"></i> Yulis Cargo
       </a>
       <button class="navbar-toggler" type="button"
@@ -149,14 +168,14 @@
               <i class="fas fa-search"></i> Pencarian
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Trace & Track</a></li>
-              <li><a class="dropdown-item" href="#">Shipping Rates</a></li>
-              <li><a class="dropdown-item" href="#">Find Drop Point</a></li>
+              <li><a class="dropdown-item" href="{{ route('trace-track') }}">Trace & Track</a></li>
+              <li><a class="dropdown-item" href="{{ route('shipping-rates') }}">Shipping Rates</a></li>
+              <li><a class="dropdown-item" href="{{ route('drop-point') }}">Find Drop Point</a></li>
             </ul>
           </li>
-          <!-- Services -->
+          <!-- Layanan -->
           <li class="nav-item mx-2">
-            <a class="nav-link" href="#"><i class="fas fa-truck"></i> Layanan</a>
+            <a class="nav-link" href="{{ route('layanan') }}"><i class="fas fa-truck"></i> Layanan</a>
           </li>
           <!-- Information -->
           <li class="nav-item dropdown mx-2">
@@ -165,9 +184,9 @@
               <i class="fas fa-info-circle"></i> Informasi
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">FAQ</a></li>
-              <li><a class="dropdown-item" href="#">Packaging Information</a></li>
-              <li><a class="dropdown-item" href="#">Terms</a></li>
+              <li><a class="dropdown-item" href="{{ route('faq') }}">FAQ</a></li>
+              <li><a class="dropdown-item" href="{{ route('packaging-info') }}">Packaging Information</a></li>
+              <li><a class="dropdown-item" href="{{ route('terms') }}">Terms</a></li>
             </ul>
           </li>
           <!-- About Us -->
@@ -177,8 +196,8 @@
               <i class="fas fa-users"></i> Tentang Kami
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Company Profile</a></li>
-              <li><a class="dropdown-item" href="#">Contact Us</a></li>
+              <li><a class="dropdown-item" href="{{ route('company-profile') }}">Company Profile</a></li>
+              <li><a class="dropdown-item" href="{{ route('contact-us') }}">Contact Us</a></li>
             </ul>
           <!-- LogIn -->
           {{-- <li class="nav-item mx-2">
@@ -194,7 +213,7 @@
   <!-- Sticky CTA Bar -->
   <div id="cta-bar" class="text-center py-2">
     <span class="fw-bold me-3">Siap Kirim Barangmu Sekarang?</span>
-    <a href="#" class="btn btn-light btn-sm">Buat Order</a>
+    <a href="{{ route('order.form') }}" class="btn btn-light btn-sm">Buat Order</a>
   </div>
 
   <!-- Main Content -->
@@ -203,35 +222,66 @@
   </main>
 
   <!-- Footer -->
-  <footer class="py-5">
+  <footer class="py-5" style="background-color: var(--clr-dark-navy); color: var(--clr-white);">
     <div class="container">
-      <div class="row">
-        <!-- Kontak -->
-        <div class="col-md-4 mb-3">
-          <h6>Kontak Kami</h6>
-          <p>Jl. Soekarno-Hatta No.187 b, Babakan Ciparay, Kec. Babakan Ciparay, <br>Kota Bandung, Jawa Barat 40223<br>0852-9478-7674</p>
+        <div class="row g-4 d-flex align-items-start">
+            <!-- Kontak -->
+            <div class="col-md-4 d-flex flex-column align-items-start">
+                <h6 class="fw-bold mb-3">Kontak Kami</h6>
+                <p class="mb-1">Jl. Soekarno-Hatta No.187 b, Babakan Ciparay,<br>
+                Kec. Babakan Ciparay, Kota Bandung, Jawa Barat 40223<br>
+                0852-9478-7674</p>
+            </div>
+            <!-- Link Cepat -->
+            <div class="col-md-4 d-flex flex-column align-items-center">
+                <h6 class="fw-bold mb-3">Link Cepat</h6>
+                <ul class="list-unstyled text-center mb-0">
+                    <li><a href="{{ route('trace-track') }}" class="footer-link">Lacak Paket</a></li>
+                    <li><a href="{{ route('shipping-rates') }}" class="footer-link">Cek Tarif</a></li>
+                    <li><a href="{{ route('faq') }}" class="footer-link">FAQ</a></li>
+                    <li><a href="{{ route('packaging-info') }}" class="footer-link">Packaging Info</a></li>
+                    <li><a href="{{ route('terms') }}" class="footer-link">Terms</a></li>
+                </ul>
+            </div>
+            <!-- Sosial -->
+            <div class="col-md-4 d-flex flex-column align-items-end">
+                <h6 class="fw-bold mb-3">Ikuti Kami</h6>
+                <div>
+                    <a href="#" class="me-2 footer-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="me-2 footer-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="footer-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
         </div>
-        <!-- Link Cepat -->
-        <div class="col-md-4 mb-3">
-          <h6>Link Cepat</h6>
-          <ul class="list-unstyled">
-            <li><a href="#">Lacak Paket</a></li>
-            <li><a href="#">Cek Tarif</a></li>
-            <li><a href="#">FAQ</a></li>
-          </ul>
-        </div>
-        <!-- Sosial -->
-        <div class="col-md-4 text-md-end">
-          <h6>Ikuti Kami</h6>
-          <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-        </div>
-      </div>
-      <hr class="border-light">
-      <p class="text-center small mb-0">&copy; {{ date('Y') }} Yulis Cargo</p>
+        <hr class="border-light my-4">
+        <p class="text-center small mb-0">&copy; {{ date('Y') }} Yulis Cargo</p>
     </div>
-  </footer>
+    <style>
+        .footer-link {
+            color: var(--clr-peach);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-link:hover {
+            color: var(--clr-orange);
+            text-decoration: underline;
+        }
+        footer ul {
+            padding-left: 0;
+        }
+        footer ul li {
+            margin-bottom: 0.3rem;
+        }
+        @media (max-width: 767px) {
+            .footer-link, .fw-bold {
+                text-align: left !important;
+            }
+            .col-md-4.d-flex {
+                align-items: flex-start !important;
+            }
+        }
+    </style>
+</footer>
 
   <!-- Bootstrap JS + AOS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -240,9 +290,17 @@
     AOS.init({ duration: 800, once: true });
     // Sticky CTA
     const ctaBar = document.getElementById('cta-bar');
-    window.addEventListener('scroll', () => {
-      ctaBar.style.display = window.scrollY > 200 ? 'block' : 'none';
-    });
+    function updateCtaBar() {
+      if (window.scrollY > 200) {
+        ctaBar.style.display = 'flex';
+        document.body.classList.add('cta-active');
+      } else {
+        ctaBar.style.display = 'none';
+        document.body.classList.remove('cta-active');
+      }
+    }
+    window.addEventListener('scroll', updateCtaBar);
+    window.addEventListener('DOMContentLoaded', updateCtaBar);
   </script>
 </body>
 </html>
