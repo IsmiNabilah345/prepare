@@ -18,4 +18,9 @@ class Tracking extends Model
         'foto_bukti',
         'catatan',
     ];
+
+    public function kurir()
+    {
+        return $this->belongsTo(\App\Models\Kurir::class, 'id_kurir');
+    }
 }
