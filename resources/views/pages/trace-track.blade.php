@@ -25,11 +25,18 @@
         </div>
     </form>
     @php
-        $resi = request('resi');
-        $order = null;
-        if ($resi) {
-            $order = \App\Models\Pengiriman::where('no_resi', $resi)->first();
-        }
+
+    $resi = request('resi');
+
+    $order = null;
+
+    if ($resi) {
+
+        //$order = \App\Models\Pengiriman::where('no_resi', $resi)->first();
+        $order = \App\Models\Pengiriman::with('kurir')->where('no_resi', $resi)->first();
+
+    }
+
     @endphp
     @if($resi)
         @if($order)
@@ -38,8 +45,11 @@
                     <h5 class="card-title text-orange mb-3"><i class="fas fa-truck-moving"></i> Status Pengiriman</h5>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><i class="fas fa-barcode text-orange me-2"></i><strong>Nomor Resi:</strong> {{ $order->no_resi }}</li>
+                        <li class="list-group-item"><i class="fas fa-user text-orange me-2"></i><strong>Nama Kurir:</strong> {{ $order->kurir->name ?? '-'  }}</li>
+                        <li class="list-group-item"><i class="fas fa-phone text-orange me-2"></i><strong>No Telephon Kurir:</strong> {{ $order->kurir->no_telp ?? '-'  }}</li>
                         <li class="list-group-item"><i class="fas fa-info-circle text-orange me-2"></i><strong>Status:</strong> {{ $order->status }}</li>
                         <li class="list-group-item"><i class="fas fa-clock text-orange me-2"></i><strong>Update Terakhir:</strong> {{ $order->updated_at->format('d-m-Y H:i') }}</li>
+                        <li class="list-group-item"><i class="fas fa-clock text-orange me-2"></i><strong>Catatan:</strong> {{ $order->catatan }}</li>
                     </ul>
                 </div>
             </div>

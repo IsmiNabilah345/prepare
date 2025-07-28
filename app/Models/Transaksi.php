@@ -14,6 +14,7 @@ class Transaksi extends Model
         'id_penerima',
         'id_produk',
         'id_tarif',
+        'layanan',
         'berat',
         'harga',
         'tgl_transaksi',

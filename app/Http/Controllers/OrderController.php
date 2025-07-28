@@ -21,19 +21,19 @@ class OrderController extends Controller
     public function submit(Request $request)
     {
         $validated = $request->validate([
-            // Pengirim
+            // pengirim
             'nama_pengirim' => 'required|string|max:255',
             'alamat_pengirim' => 'required|string|max:255',
             'kota_pengirim' => 'required|string|max:100',
             'kode_pos_pengirim' => 'required|numeric',
             'telp_pengirim' => 'required|string|max:20',
-            // Penerima
+            // penerima
             'nama_penerima' => 'required|string|max:255',
             'alamat_penerima' => 'required|string|max:255',
             'kota_penerima' => 'required|string|max:100',
             'kode_pos_penerima' => 'required|numeric',
             'telp_penerima' => 'required|string|max:20',
-            // Paket
+            // paket
             'jumlah_produk' => 'required|numeric|min:1',
             'berat_kiriman' => 'required|numeric|min:1',
             'volume_produk' => 'nullable|numeric|min:0',
@@ -43,7 +43,7 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
-            // Simpan pengirim
+            // simpan pengirim
             $pengirim = \App\Models\Pengirim::create([
                 'nama_pengirim' => $validated['nama_pengirim'],
                 'alamat_pengirim' => $validated['alamat_pengirim'],
@@ -51,7 +51,7 @@ class OrderController extends Controller
                 'kode_pos' => $validated['kode_pos_pengirim'],
                 'telp_pengirim' => $validated['telp_pengirim'],
             ]);
-            // Simpan penerima
+            // simpan penerima
             $penerima = \App\Models\Penerima::create([
                 'nama_penerima' => $validated['nama_penerima'],
                 'alamat_penerima' => $validated['alamat_penerima'],
@@ -59,12 +59,12 @@ class OrderController extends Controller
                 'kode_pos' => $validated['kode_pos_penerima'],
                 'telp_penerima' => $validated['telp_penerima'],
             ]);
-            // Generate nomor resi unik
+            // generate nomor resi unik
             $prefix = 'YKB-' . now()->format('Ymd') . '-';
             do {
                 $resi = $prefix . strtoupper(Str::random(6));
             } while (\App\Models\Pengiriman::where('no_resi', $resi)->exists());
-            // Simpan produk
+            // simpan produk
             $produk = \App\Models\Produk::create([
                 'jumlah_produk' => $validated['jumlah_produk'],
                 'berat_kiriman' => $validated['berat_kiriman'],
@@ -73,19 +73,19 @@ class OrderController extends Controller
                 'ket_produk' => $validated['ket_produk'] ?? '',
                 'no_resi' => $resi,
             ]);
-            // Simpan pengiriman (order utama)
-            $pengiriman = \App\Models\Pengiriman::create([
-                'no_resi' => $resi,
-                'id_produk' => $produk->id,
-                'id_kurir' => null, // belum ditugaskan
-                'id_penerima' => $penerima->id_penerima,
-                'tanggal_kirim' => null,
-                'status' => 'belum dikirim',
-                'layanan' => $validated['layanan'],
-                'tipe_kendaraan' => 'motor',
-                'estimasi_sampai' => null,
-                'catatan' => null,
-            ]);
+            // simpan pengiriman (order utama)
+            // $pengiriman = \App\Models\Pengiriman::create([
+            //     'no_resi' => $resi,
+            //     'id_produk' => $produk->id,
+            //     'id_kurir' => null, // belum ditugaskan
+            //     'id_penerima' => $penerima->id_penerima,
+            //     'tanggal_kirim' => null,
+            //     'status' => 'belum dikirim',
+            //     'layanan' => $validated['layanan'], 
+            //     'tipe_kendaraan' => 'motor',
+            //     'estimasi_sampai' => null,
+            //     'catatan' => null,
+            // ]);
             DB::commit();
             return redirect()->route('home')->with('success', 'Order berhasil dibuat! Nomor Resi: ' . $resi);
         } catch (\Exception $e) {
@@ -93,4 +93,4 @@ class OrderController extends Controller
             return back()->withErrors(['error' => 'Gagal membuat order: ' . $e->getMessage()])->withInput();
         }
     }
-} 
+}

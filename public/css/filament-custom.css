@@ -1,0 +1,5 @@
+/* Style menu sidebar dengan label 'Drop Point' */
+li[title="Drop Point"] a {
+    color: red !important;
+    font-weight: bold;
+}

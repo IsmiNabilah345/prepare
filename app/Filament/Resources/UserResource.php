@@ -50,6 +50,9 @@ class UserResource extends Resource
                         ->dehydrated(fn($state) => filled($state))
                         ->label('Password Baru'),
                 ]),
+               
+                TextInput::make('no_telp')
+                    ->label('No Telepon')
             ]);
     }
 
@@ -63,6 +66,7 @@ class UserResource extends Resource
                     ->searchable(),
                 TextColumn::make('name')->label('Nama')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
+                TextColumn::make('no_telp')->label('No Telepon')->searchable(),
                 TextColumn::make('created_at')
                     ->label('Dibuat')
                     ->dateTime()

@@ -7,6 +7,7 @@ use App\Models\Pengiriman;
 use App\Models\Tracking;
 use Illuminate\Support\Facades\Auth;
 use Livewire\WithFileUploads;
+use Filament\Notifications\Notification;
 
 class UploadBukti extends Page
 {
@@ -25,20 +26,53 @@ class UploadBukti extends Page
 
     public function submit()
     {
+        //dd($this->pengiriman);
+        $this->validate([
+            'foto_bukti' => 'required|image|max:2048',
+        ]);
+
+        logger([
+            'guard_kurir_id' => Auth::guard('kurir')->id(),
+            'auth_user' => Auth::guard('kurir')->user(),
+        ]);
+
+        logger([
+            'id_pengiriman' => $this->pengiriman->id,
+            'id_kurir' => $this->pengiriman->id_kurir,
+        ]);
+
+        $this->pengiriman = Pengiriman::findOrFail($this->pengiriman->id);
+
+        if ($this->pengiriman->id_kurir !== Auth::guard('kurir')->id()) {
+            Notification::make()
+                ->title('Akses Ditolak')
+                ->body('Pengiriman ini bukan milikmu.')
+                ->danger()
+                ->send();
+
+            return;
+        }
+
         $path = $this->foto_bukti->store('images', 'public');
+
+        $this->pengiriman = Pengiriman::findOrFail($this->pengiriman->id);
 
         Tracking::create([
             'id_pengiriman' => $this->pengiriman->id,
-            'foto_bukti' => $path,
-            'waktu_kirim' => now(),
+            'id_kurir'      => $this->pengiriman->id_kurir,
+            'foto_bukti'    => $path,
         ]);
 
         $this->pengiriman->update([
             'status' => 'terkirim',
         ]);
 
+        Notification::make()
+            ->title('Bukti Berhasil Diupload')
+            ->success()
+            ->send();
+
         return redirect()->route('filament.kurir.pages.dashboard-kurir');
-        //return redirect()->route('filament.kurir.pages.upload-bukti', ['id' => $this->pengiriman->id]);
     }
 
     public static function getSlug(): string
@@ -48,62 +82,6 @@ class UploadBukti extends Page
 
     public static function canAccess(): bool
     {
-        return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
+        return Auth::guard('kurir')->check() && in_array(Auth::guard('kurir')->user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
     }
 }
-
-
-
-// 
-// use Livewire\WithFileUploads;
-// use Illuminate\Support\Facades\Auth;
-// use App\Models\Tracking;
-
-// class UploadBukti extends Page
-// {
-//     use WithFileUploads;
-
-//     public $foto_bukti;
-
-//     protected static string $view = 'filament.pages.upload-bukti';
-
-//     public ?Pengiriman $pengiriman = null;
-
-//     public function mount($id = null): void
-//     {
-//         $this->pengiriman = Pengiriman::with(['transaksi.produk', 'transaksi.penerimas'])
-//             ->findOrFail($id);
-
-//         if (! in_array(Auth::user()?->role, ['kurir', 'kurir_motor', 'kurir_truk'])) {
-//             abort(403);
-//         }
-//     }
-
-
-//     public function simpan()
-//     {
-//         $filename = time() . '-' . $this->foto_bukti->getClientOriginalName();
-//         $this->foto_bukti->storeAs('images', $filename, 'public');
-
-//         $path = 'images/' . $filename;
-
-//         Tracking::create([
-//             'id_pengiriman' => $this->pengiriman->id,
-//             'foto_bukti' => $path,
-//         ]);
-
-//         $this->pengiriman->update(['status' => 'terkirim']);
-
-//         session()->flash('success', 'Bukti berhasil diupload.');
-//         return redirect()->route('filament.kurir.pages.dashboard-kurir');
-//     }
-
-//     public static function canAccess(): bool
-//     {
-//         return Auth::check() && in_array(Auth::user()->role, ['kurir', 'kurir_motor', 'kurir_truk']);
-//     }
-
-//     public static function getSlug(): string
-//     {
-//         return 'upload-bukti';
-//     }

@@ -38,9 +38,9 @@
                 <div class="input-group">
                     <span class="input-group-text bg-orange text-white"><i class="fas fa-shipping-fast"></i></span>
                     <select id="jenis" name="jenis" class="form-control" required>
-                        <option value="reguler" @if(request('jenis')=='reguler') selected @endif>Reguler</option>
+                        <option value="regular" @if(request('jenis')=='regular') selected @endif>Reguler</option>
                         <option value="express" @if(request('jenis')=='express') selected @endif>Express</option>
-                        <option value="same day" @if(request('jenis')=='same day') selected @endif>Same Day</option>
+                        <option value="sameday" @if(request('jenis')=='sameday') selected @endif>Same Day</option>
                     </select>
                 </div>
             </div>

@@ -60,7 +60,7 @@
             </div>
         @empty
             <div class="col-12">
-                <div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Tidak ada drop point ditemukan.</div>
+                <div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Akan dikembangkan di proyek 2.</div>
             </div>
         @endforelse
     </div>

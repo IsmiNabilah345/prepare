@@ -17,6 +17,12 @@ class DropPointResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-map-pin';
     protected static ?string $navigationLabel = 'Drop Point';
+    
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected static ?string $navigationGroup = 'Pengelolaan';
 
     public static function form(Form $form): Form
@@ -42,6 +48,18 @@ class DropPointResource extends Resource
                 TextColumn::make('kota'),
                 TextColumn::make('telepon'),
                 TextColumn::make('jam_buka'),
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
     }
 
@@ -53,4 +71,4 @@ class DropPointResource extends Resource
             'edit' => Pages\EditDropPoint::route('/{record}/edit'),
         ];
     }
-} 
+}

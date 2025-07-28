@@ -15,15 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_pengirim');
             $table->unsignedBigInteger('id_penerima');
+            $table->unsignedBigInteger('id_tarif');
             $table->string('layanan');
             $table->float('berat');
             $table->date('tgl_transaksi');
-            $table->foreignId('id_tarif')->constrained('tarifs');
+            $table->foreign('id_tarif')->references('id_tarif')->on('tarifs');
             $table->integer('harga');
             $table->timestamps();
 
-            $table->foreign('id_pengirim')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('id_penerima')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_pengirim')->references('id')->on('pengirims')->onDelete('cascade');
+            $table->foreign('id_penerima')->references('id')->on('penerimas')->onDelete('cascade');
         });
     }
 

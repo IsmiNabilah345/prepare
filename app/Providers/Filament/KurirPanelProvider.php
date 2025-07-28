@@ -24,6 +24,11 @@ class KurirPanelProvider extends PanelProvider
             ->id('kurir')
             ->path('kurir')
             ->login(\App\Filament\Kurir\Pages\Auth\Login::class)
+            ->brandName('Yulis Kargo')
+            ->renderHook(
+                'head.start',
+                fn() => '<link rel="icon" href="' . asset('images/logo.png') . '" />'
+            )
             ->authGuard('kurir')
             ->pages([
                 DashboardKurir::class,

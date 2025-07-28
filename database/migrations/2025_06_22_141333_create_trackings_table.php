@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('trackings', function (Blueprint $table) {
             $table->id('id_tracking');
-            $table->string('no_resi');
+            $table->unsignedBigInteger('id_pengiriman');
+            $table->unsignedBigInteger('id_kurir');
             $table->string('status');
             $table->string('nama_kurir');
             $table->timestamps();

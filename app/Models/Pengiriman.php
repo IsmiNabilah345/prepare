@@ -17,6 +17,7 @@ class Pengiriman extends Model
     protected $fillable = [
         'id_transaksi',
         'id_kurir',
+        'no_resi',
         'tanggal_kirim',
         'status',
         'tipe_kendaraan',

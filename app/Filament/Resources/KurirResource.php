@@ -23,6 +23,11 @@ class KurirResource extends Resource
 
     protected static ?string $navigationLabel = 'Kurir';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

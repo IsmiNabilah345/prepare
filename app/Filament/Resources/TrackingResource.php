@@ -37,6 +37,8 @@ class TrackingResource extends Resource
             ->columns([
                 TextColumn::make('id_pengiriman')
                     ->label('Pengiriman Produk'),
+                TextColumn::make('id_kurir')
+                    ->label('Nama Kurir'),
                 TextColumn::make('status')
                     ->label('Status'),
                 TextColumn::make('foto_bukti')
@@ -70,7 +72,7 @@ class TrackingResource extends Resource
     {
         return [
             'index' => Pages\ListTrackings::route('/'),
-            'create' => Pages\CreateTracking::route('/create'),
+            //'create' => Pages\CreateTracking::route('/create'),
             'edit' => Pages\EditTracking::route('/{record}/edit'),
         ];
     }
@@ -82,4 +84,5 @@ class TrackingResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+    
 }

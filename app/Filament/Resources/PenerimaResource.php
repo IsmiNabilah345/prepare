@@ -34,6 +34,9 @@ class PenerimaResource extends Resource
                 TextInput::make('alamat_penerima')
                     ->required()
                     ->label('Alamat'),
+                TextInput::make('kota_penerima')
+                    ->required()
+                    ->label('kota'),
                 TextInput::make('kode_pos')
                     ->required()
                     ->label('Kode Pos'),
@@ -52,6 +55,8 @@ class PenerimaResource extends Resource
                     ->searchable(),
                 TextColumn::make('alamat_penerima')
                     ->label('Alamat'),
+                TextColumn::make('kota_penerima')
+                    ->label('Kota'),
                 TextColumn::make('kode_pos')
                     ->label('Kode Pos'),
                 TextColumn::make('telp_penerima')

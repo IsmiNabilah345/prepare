@@ -18,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use App\Models\Transaksi;
 use App\Models\User;
+use Filament\Forms\Components\TextInput;
 
 class PengirimanResource extends Resource
 {
@@ -40,7 +41,19 @@ class PengirimanResource extends Resource
                             ->toArray();
                     })
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(function (callable $set, $state) {
+                        $transaksi = Transaksi::find($state);
+                        if ($transaksi) {
+                            $set('no_resi', $transaksi->no_resi);
+                        }
+                    }),
+
+                TextInput::make('no_resi')
+                    ->label('No Resi')
+                    ->disabled()
+                    ->dehydrated(),
 
                 Select::make('id_kurir')
                     ->label('Nama Kurir')
@@ -85,6 +98,7 @@ class PengirimanResource extends Resource
                     ->nullable(),
             ]);
     }
+
 
 
     public static function table(Table $table): Table

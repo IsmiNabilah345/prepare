@@ -102,6 +102,10 @@
             </div>
         </div>
     </form>
+    <br>
+    {{-- <div class="col-12">
+                <div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Akan dikembangkan di proyek 2.</div>
+            </div> --}}
 </div>
 <style>
     .bg-orange { background-color: #E1652C !important; }

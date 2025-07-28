@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardKurir extends Page
 {
+    protected function getUser()
+    {
+        return Auth::guard('kurir')->user();
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-truck';
     protected static ?string $navigationLabel = 'Dashboard Kurir';
     protected static ?string $title = 'Tugas Pengiriman Saya';

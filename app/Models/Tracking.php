@@ -13,6 +13,7 @@ class Tracking extends Model
 
     protected $fillable = [
         'id_pengiriman',
+        'id_kurir',
         'status',
         'foto_bukti',
         'catatan'
@@ -20,8 +21,9 @@ class Tracking extends Model
 
     public function kurir()
     {
-        return $this->belongsTo(\App\Models\Kurir::class, 'id_kurir');
-      
+        return $this->belongsTo(User::class, 'id_kurir');
+    }
+
     public function pengiriman()
     {
         return $this->belongsTo(Pengiriman::class, 'id_pengiriman');

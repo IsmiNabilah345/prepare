@@ -14,6 +14,7 @@ class Pengirim extends Model
     protected $fillable = [
         'nama_pengirim',
         'alamat_pengirim',
+        'kota_pengirim',
         'kode_pos',
         'telp_pengirim',
     ];

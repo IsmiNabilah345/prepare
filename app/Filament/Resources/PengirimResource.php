@@ -34,6 +34,9 @@ class PengirimResource extends Resource
                 TextInput::make('alamat_pengirim')
                     ->required()
                     ->label('Alamat'),
+                TextInput::make('kota_pengirim')
+                    ->required()
+                    ->label('Kota'),
                 TextInput::make('kode_pos')
                     ->required()
                     ->label('Kode Pos'),
@@ -52,6 +55,8 @@ class PengirimResource extends Resource
                     ->searchable(),
                 TextColumn::make('alamat_pengirim')
                     ->label('Alamat'),
+                TextColumn::make('kota_pengirim')
+                    ->label('Kota'),
                 TextColumn::make('kode_pos')
                     ->label('Kode Pos'),
                 TextColumn::make('telp_pengirim')
