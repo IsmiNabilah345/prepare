@@ -32,8 +32,12 @@
 
     if ($resi) {
 
-        //$order = \App\Models\Pengiriman::where('no_resi', $resi)->first();
         $order = \App\Models\Pengiriman::with('kurir')->where('no_resi', $resi)->first();
+
+        if ($order) {
+        $catatan = \App\Models\Tracking::where('id_pengiriman', $order->id)->latest()->first()->catatan ?? null;
+    }
+
 
     }
 
@@ -49,7 +53,7 @@
                         <li class="list-group-item"><i class="fas fa-phone text-orange me-2"></i><strong>No Telephon Kurir:</strong> {{ $order->kurir->no_telp ?? '-'  }}</li>
                         <li class="list-group-item"><i class="fas fa-info-circle text-orange me-2"></i><strong>Status:</strong> {{ $order->status }}</li>
                         <li class="list-group-item"><i class="fas fa-clock text-orange me-2"></i><strong>Update Terakhir:</strong> {{ $order->updated_at->format('d-m-Y H:i') }}</li>
-                        <li class="list-group-item"><i class="fas fa-clock text-orange me-2"></i><strong>Catatan:</strong> {{ $order->catatan }}</li>
+                        {{-- <li class="list-group-item"><i class="fas fa-clock text-orange me-2"></i><strong>Catatan:</strong> {{ $catatan }}</li> --}}
                     </ul>
                 </div>
             </div>

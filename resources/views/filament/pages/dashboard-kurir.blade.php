@@ -7,7 +7,7 @@
         <p><strong>Nomor Telepon:</strong> {{ $pengiriman->transaksi?->penerima?->telp_penerima }}</p>
         <p><strong>Alamat:</strong> {{ $pengiriman->transaksi?->penerima?->alamat_penerima }}</p>
         <p><strong>Kota:</strong> {{ $pengiriman->transaksi?->penerima?->kota_penerima }}</p>
-        <p><strong>Kurir:</strong> {{ $pengiriman->id_kurir }}</p>
+        {{-- <p><strong>Kurir:</strong> {{ $pengiriman->id_kurir }}</p> --}}
         <p><strong>Catatan:</strong> {{ $pengiriman->catatan }}</p>
     </div>
     @endforeach
